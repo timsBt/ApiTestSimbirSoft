@@ -2,6 +2,8 @@ import io.qameta.allure.Description;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.util.List;
 
@@ -13,6 +15,7 @@ public class TestApi extends Spetifications {
 
     @Test
     @Description ("Проверка имени покемона rattata")
+    @Execution(ExecutionMode.CONCURRENT)
     public void checkNameRattataTest (){
         Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
         given()
@@ -24,6 +27,7 @@ public class TestApi extends Spetifications {
 
     @Test
     @Description ("Проверка имени покемона pidgeotto")
+    @Execution(ExecutionMode.CONCURRENT)
     public void checkNamePidgeottoTest (){
         Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
         given()
@@ -35,6 +39,7 @@ public class TestApi extends Spetifications {
 
     @Test
     @Description ("Проверка что покемон rattata имеет умение run-away")
+    @Execution(ExecutionMode.CONCURRENT)
     public void checkAbilityRattataTest (){
         Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
         given()
@@ -46,6 +51,7 @@ public class TestApi extends Spetifications {
 
     @Test
     @Description ("Проверка что вес rattata меньше веса pidgeotto")
+    @Execution(ExecutionMode.CONCURRENT)
     public void checkWeightRattataPidgeottoTest (){
         Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
       int ratta = given()
@@ -65,6 +71,7 @@ public class TestApi extends Spetifications {
 
     @Test
     @Description ("Проверка что покемонов в ограниченном списке равно количеству покемонов в count")
+    @Execution(ExecutionMode.CONCURRENT)
     public void checklimitTest(){
         Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
         List <LimitPoke> results = given()
@@ -84,12 +91,13 @@ public class TestApi extends Spetifications {
 
    @Test
    @Description ("Проверка что у покемонов в ограниченном списке есть name")
+   @Execution(ExecutionMode.CONCURRENT)
    public void limitNameTest(){
         Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
         List <LimitPoke> pokesName = given()
                 .when()
                 .get("api/v2/pokemon?limit=100000&offset=0")
-                .then().log().all()
+                .then()
                 .extract().body().jsonPath().getList("results", LimitPoke.class);
         pokesName.forEach(x-> Assertions.assertTrue(x.getResultNames().contains(x.getResultNames())));
     }
