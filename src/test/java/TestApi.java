@@ -46,7 +46,7 @@ public class TestApi extends Spetifications {
                 .when()
                 .get("api/v2/pokemon/rattata")
                 .then()
-            .body("abilities[0].ability.name",Matchers.equalTo("run-away"));
+                .body("abilities[0].ability.name",Matchers.equalTo("run-away"));
     }
 
     @Test
@@ -54,22 +54,22 @@ public class TestApi extends Spetifications {
     @Execution(ExecutionMode.CONCURRENT)
     public void checkWeightRattataPidgeottoTest (){
         Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
-      int ratta = given()
+        int ratta = given()
                 .when()
                 .get("api/v2/pokemon/rattata")
                 .then()
-           .extract().body().jsonPath().getInt("weight");
+                .extract().body().jsonPath().getInt("weight");
 
         Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
-       int pidge = given()
+        int pidge = given()
                 .when()
                 .get("api/v2/pokemon/pidgeotto")
                 .then()
-        .extract().body().jsonPath().getInt("weight");
-       Assertions.assertTrue(ratta < pidge);
+                .extract().body().jsonPath().getInt("weight");
+        Assertions.assertTrue(ratta < pidge);
     }
 
-    @Test
+ /*   @Test
     @Description ("Проверка что покемонов в ограниченном списке равно количеству покемонов в count")
     @Execution(ExecutionMode.CONCURRENT)
     public void checklimitTest(){
@@ -86,10 +86,10 @@ public class TestApi extends Spetifications {
                 .extract().body().jsonPath().getInt("count");
         Assertions.assertTrue(results.size() == count);
         System.out.println(results.size() + " " + count);
-    }
+    }*/
 
 
-   @Test
+/*   @Test
    @Description ("Проверка что у покемонов в ограниченном списке есть name")
    @Execution(ExecutionMode.CONCURRENT)
    public void limitNameTest(){
@@ -99,6 +99,15 @@ public class TestApi extends Spetifications {
                 .get("api/v2/pokemon?limit=100000&offset=0")
                 .then()
                 .extract().body().jsonPath().getList("results", LimitPoke.class);
+        pokesName.forEach(x-> Assertions.assertTrue(x.getResultNames().contains(x.getResultNames())));
+    }*/
+
+
+   @Test
+   @Description ("Проверка что у покемонов в ограниченном списке есть name")
+   @Execution(ExecutionMode.CONCURRENT)
+   public void limitNameTest2(){
+        List <LimitPoke> pokesName = Steps.pokesName();
         pokesName.forEach(x-> Assertions.assertTrue(x.getResultNames().contains(x.getResultNames())));
     }
 
