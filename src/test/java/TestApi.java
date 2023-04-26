@@ -1,16 +1,13 @@
 import Models.Ability;
 import Models.LimitPokemons;
 import io.qameta.allure.Description;
-import org.junit.jupiter.api.*;
-
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import java.util.List;
 
 public class TestApi extends Spetifications {
 
-    @BeforeEach
-    public void runSpetification(){
-        spetificationRun();
-    }
 
     @Test
     @DisplayName("TC-1 Проверка имени (name) покемона rattata")

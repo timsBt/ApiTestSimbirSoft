@@ -1,4 +1,3 @@
-import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
@@ -6,16 +5,14 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
-public class Spetifications {
 
-    private final static String URL = "https://pokeapi.co/api/v2/pokemon/";
+public class Spetifications {
 
     public static RequestSpecification requestSpec(String url){
         return new RequestSpecBuilder()
                 .setBaseUri(url)
                 .setContentType(ContentType.JSON)
-                .build()
-                .filter(new AllureRestAssured());
+                .build();
     }
 
     public static ResponseSpecification responseSpecOK200(){
@@ -27,10 +24,6 @@ public class Spetifications {
     public static void installSpetification(RequestSpecification request, ResponseSpecification response){
         RestAssured.requestSpecification = request;
         RestAssured.responseSpecification = response;
-    }
-
-    public static void spetificationRun(){
-        installSpetification(requestSpec(URL),responseSpecOK200());
     }
 }
 
