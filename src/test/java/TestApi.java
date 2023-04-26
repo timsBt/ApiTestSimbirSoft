@@ -1,30 +1,42 @@
 import io.qameta.allure.Description;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 import java.util.List;
+import static io.restassured.RestAssured.given;
 
 public class TestApi extends Spetifications {
+
+  private final static String URL = "https://pokeapi.co/";
 
     @Test
     @Description ("Проверка имени покемона rattata")
     @Execution(ExecutionMode.CONCURRENT)
-    public void checkNameRattataTest () {
-        String rattataName = Steps.checkNamePokemonsTest("rattata").getPokemonsName();
-        Assertions.assertEquals("rattata", rattataName, "Имя покемона не соответсвует");
+    public void checkNameRattataTest (){
+        Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
+        given()
+                .when()
+                .get("api/v2/pokemon/rattata")
+                .then()
+                .body("name", Matchers.equalTo("rattata"));
     }
 
     @Test
     @Description ("Проверка имени покемона pidgeotto")
     @Execution(ExecutionMode.CONCURRENT)
     public void checkNamePidgeottoTest (){
-        String pidgeottoName = Steps.checkNamePokemonsTest("pidgeotto").getPokemonsName();
-        Assertions.assertEquals("pidgeotto", pidgeottoName, "Имя покемона не соответсвует");
+        Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
+        given()
+                .when()
+                .get("api/v2/pokemon/pidgeotto")
+                .then()
+                .body("name",Matchers.equalTo("pidgeotto"));
     }
 
     @Test
-    @Description ("Проверка что у покемона rattata есть умение run-away")
+    @Description ("Проверка что покемон rattata имеет умение run-away")
     @Execution(ExecutionMode.CONCURRENT)
     public void checkAbilityRattataTest () {
         List <Ability> abilities = Steps.ability("rattata");
@@ -35,7 +47,7 @@ public class TestApi extends Spetifications {
     }
 
     @Test
-    @Description ("Проверка что у покемона pidgeotto нет умения run-away")
+    @Description ("Проверка что покемон pidgeotto не имеет умение run-away")
     @Execution(ExecutionMode.CONCURRENT)
     public void checkAbilityPidgeottoTest () {
         List <Ability> abilities = Steps.ability("pidgeotto");
@@ -59,7 +71,7 @@ public class TestApi extends Spetifications {
     @Execution(ExecutionMode.CONCURRENT)
     public void checkLimitTest(){
         List <LimitPokemons> results = Steps.limitPokemonsList();
-        Assertions.assertEquals( 20,results.size());
+        Assertions.assertEquals(20, results.size());
     }
 
     @Test

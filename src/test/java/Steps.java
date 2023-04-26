@@ -1,8 +1,6 @@
 import io.qameta.allure.Step;
 import java.util.List;
-
 import static io.restassured.RestAssured.given;
-
 
 public class Steps {
 
@@ -36,14 +34,5 @@ public class Steps {
                 .get("api/v2/pokemon/" + name)
                 .then()
                 .extract().as(Weight.class);
-    }
-
-    public static NamesPokemons checkNamePokemonsTest (String name){
-        Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
-        return given()
-                .when()
-                .get("api/v2/pokemon/"+ name)
-                .then()
-                .extract().as(NamesPokemons.class);
     }
 }
