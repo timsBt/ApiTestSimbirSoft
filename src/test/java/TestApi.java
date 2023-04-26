@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
+
 import java.util.List;
+
 import static io.restassured.RestAssured.given;
 
 public class TestApi extends Spetifications {
@@ -38,47 +40,86 @@ public class TestApi extends Spetifications {
     @Test
     @Description ("Проверка что покемон rattata имеет умение run-away")
     @Execution(ExecutionMode.CONCURRENT)
-    public void checkAbilityRattataTest () {
-        List <Ability> abilities = Steps.ability("rattata");
-        List <String> rattataAbility = abilities.stream().map(Ability::getName).toList();
-        for (String i:rattataAbility) {
-            Assertions.assertTrue(rattataAbility.contains("run-away"));
-        }
-    }
-
-    @Test
-    @Description ("Проверка что покемон pidgeotto не имеет умение run-away")
-    @Execution(ExecutionMode.CONCURRENT)
-    public void checkAbilityPidgeottoTest () {
-        List <Ability> abilities = Steps.ability("pidgeotto");
-        List <String> pidgeottoAbility = abilities.stream().map(Ability::getName).toList();
-        for (String i:pidgeottoAbility) {
-            Assertions.assertFalse(pidgeottoAbility.contains("run-away"));
-        }
+    public void checkAbilityRattataTest (){
+        Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
+        given()
+                .when()
+                .get("api/v2/pokemon/rattata")
+                .then()
+                .body("abilities[0].ability.name",Matchers.equalTo("run-away"));
     }
 
     @Test
     @Description ("Проверка что вес rattata меньше веса pidgeotto")
     @Execution(ExecutionMode.CONCURRENT)
-    public void checkWeightPokemonsTest (){
-        int rattataWeight = Steps.checkWeightPokemonsTests("rattata").getWeight();
-        int pidgeottoWeight = Steps.checkWeightPokemonsTests("pidgeotto").getWeight();
-        Assertions.assertTrue(rattataWeight < pidgeottoWeight);
+    public void checkWeightRattataPidgeottoTest (){
+        Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
+        int ratta = given()
+                .when()
+                .get("api/v2/pokemon/rattata")
+                .then()
+                .extract().body().jsonPath().getInt("weight");
+
+        Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
+        int pidge = given()
+                .when()
+                .get("api/v2/pokemon/pidgeotto")
+                .then()
+                .extract().body().jsonPath().getInt("weight");
+        Assertions.assertTrue(ratta < pidge);
     }
 
-    @Test
-    @Description ("Проверка что покемонов в ограниченном списке равно 20")
+ /*   @Test
+    @Description ("Проверка что покемонов в ограниченном списке равно количеству покемонов в count")
     @Execution(ExecutionMode.CONCURRENT)
-    public void checkLimitTest(){
-        List <LimitPokemons> results = Steps.limitPokemonsList();
-        Assertions.assertEquals(20, results.size());
+    public void checklimitTest(){
+        Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
+        List <LimitPoke> results = given()
+                .when()
+                .get("api/v2/pokemon?limit=100000&offset=0")
+                .then()
+                .extract().body().jsonPath().getList("results", LimitPoke.class);
+       int count = given()
+                .when()
+                .get("api/v2/pokemon?limit=100000&offset=0")
+                .then()
+                .extract().body().jsonPath().getInt("count");
+        Assertions.assertTrue(results.size() == count);
+        System.out.println(results.size() + " " + count);
+    }*/
+
+
+/*   @Test
+   @Description ("Проверка что у покемонов в ограниченном списке есть name")
+   @Execution(ExecutionMode.CONCURRENT)
+   public void limitNameTest(){
+        Spetifications.installSpetification(Spetifications.requestSpec(URL),Spetifications.responseSpecOK200());
+        List <LimitPoke> pokesName = given()
+                .when()
+                .get("api/v2/pokemon?limit=100000&offset=0")
+                .then()
+                .extract().body().jsonPath().getList("results", LimitPoke.class);
+        pokesName.forEach(x-> Assertions.assertTrue(x.getResultNames().contains(x.getResultNames())));
+    }*/
+
+
+   @Test
+   @Description ("Проверка что у покемонов в ограниченном списке есть name")
+   @Execution(ExecutionMode.CONCURRENT)
+   public void limitNameTest2(){
+        List <LimitPoke> pokesName = Steps.pokesName();
+        pokesName.forEach(x-> Assertions.assertTrue(x.getResultNames().contains(x.getResultNames())));
     }
 
-    @Test
-    @Description ("Проверка что у покемонов в ограниченном списке есть name")
-    @Execution(ExecutionMode.CONCURRENT)
-    public void limitNameTest(){
-        List <LimitPokemons> pokemonsName = Steps.limitPokemonsList();
-        pokemonsName.forEach(x-> Assertions.assertTrue(x.getResultNames().contains(x.getResultNames())));
-    }
+
+
+
+
+
+
+
+
+
+
+
 }

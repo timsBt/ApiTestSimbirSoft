@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class LimitPokemons {
+public class LimitPoke {
 
         @JsonProperty ("name")
         private String resultNames;

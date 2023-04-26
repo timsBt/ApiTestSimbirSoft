@@ -5,6 +5,7 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
+import static io.restassured.RestAssured.given;
 
 public class Spetifications {
 
@@ -20,11 +21,17 @@ public class Spetifications {
                 .expectStatusCode(200)
                 .build();
     }
+/*    public static ResponseSpecification responseSpecERROR400(){
+        return new ResponseSpecBuilder()
+                .expectStatusCode(400)
+                .build();
+    }*/
 
     public static void installSpetification(RequestSpecification request, ResponseSpecification response){
         RestAssured.requestSpecification = request;
         RestAssured.responseSpecification = response;
     }
+
 }
 
 
